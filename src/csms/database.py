@@ -26,6 +26,18 @@ def initialize_database(database_path=DEFAULT_DATABASE_PATH):
         """
     )
 
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS service_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            resident_id INTEGER NOT NULL,
+            service_type TEXT NOT NULL,
+            description TEXT NOT NULL,
+            date_requested TEXT NOT NULL,
+            status TEXT NOT NULL
+        )
+        """
+    )
+
     connection.commit()
     connection.close()
-    
