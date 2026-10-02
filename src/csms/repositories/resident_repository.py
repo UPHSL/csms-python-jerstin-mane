@@ -160,3 +160,33 @@ class ResidentRepository:
             )
             for row in rows
         ]
+
+    def update(self, resident):
+        connection = sqlite3.connect(self.database_path)
+
+        connection.execute(
+            """
+            UPDATE residents
+            SET
+                first_name = ?,
+                last_name = ?,
+                address = ?,
+                contact_number = ?,
+                email = ?
+            WHERE id = ?
+            """,
+            (
+                resident.first_name,
+                resident.last_name,
+                resident.address,
+                resident.contact_number,
+                resident.email,
+                resident.id,
+            ),
+        )
+
+        connection.commit()
+
+        connection.close()
+
+        return self.find_by_id(resident.id)
