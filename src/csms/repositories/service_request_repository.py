@@ -76,3 +76,20 @@ class ServiceRequestRepository:
             date_requested=date.fromisoformat(row["date_requested"]),
             status=row["status"],
         )
+
+    def update_status(self, service_request_id, status):
+        connection = sqlite3.connect(self.database_path)
+
+        connection.execute(
+            """
+            UPDATE service_requests
+            SET status = ?
+            WHERE id = ?
+            """,
+            (status, service_request_id),
+        )
+
+        connection.commit()
+        connection.close()
+
+        return self.find_by_id(service_request_id)
