@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <main class="page-container">
+        <section class="page-card">
+            <header class="page-header">
+                <div>
+                    <p class="label">Community Services Management System</p>
+                    <h1>Resident Management</h1>
+                    <p class="message">View, search, and manage registered residents.</p>
+                </div>
+
+                <a class="button" href="{{ url_for('main.register_resident') }}">
+                    Register Resident
+                </a>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+            <form class="search-form" method="GET" action="{{ url_for('main.resident_list') }}">
+                <label for="search">Search by first name or last name</label>
+                <div class="search-controls">
+                    <input
+                        type="text"
+                        id="search"
+                        name="q"
+                        value="{{ search_term }}"
+                        placeholder="Enter a resident's name"
+                    >
+                    <button type="submit">Search</button>
+                    <a class="button button-secondary" href="{{ url_for('main.resident_list') }}">
+                        Clear
+                    </a>
+                </div>
+            </form>
+
+            <div class="table-heading">
+                <h2>Registered Residents</h2>
+                <p>{{ residents|length }} resident(s) found</p>
+            </div>
+
+            {% if residents %}
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Full Name</th>
+                                <th>Address</th>
+                                <th>Contact Number</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for resident in residents %}
+                                <tr>
+                                    <td>{{ resident.id }}</td>
+                                    <td>{{ resident.first_name }} {{ resident.last_name }}</td>
+                                    <td>{{ resident.address }}</td>
+                                    <td>{{ resident.contact_number }}</td>
+                                    <td>{{ resident.email }}</td>
+                                    <td>
+                                        <span class="status-badge status-{{ resident.status|lower }}">
+                                            {{ resident.status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-group">
+                                            <a
+                                                class="button button-small"
+                                                href="{{ url_for('main.edit_resident', resident_id=resident.id) }}"
+                                            >
+                                                Edit
+                                            </a>
+
+                                            {% if resident.status == "Active" %}
+                                                <form
+                                                    method="POST"
+                                                    action="{{ url_for('main.deactivate_resident', resident_id=resident.id) }}"
+                                                    onsubmit="return confirm('Are you sure you want to deactivate this resident?');"
+                                                >
+                                                    <button class="button button-small button-danger" type="submit">
+                                                        Deactivate
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    {% if search_term %}
+                        <h3>No matching residents found</h3>
+                        <p>Try another name or clear your search.</p>
+                    {% else %}
+                        <h3>No registered residents yet</h3>
+                        <p>Register a resident to display their information here.</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <footer class="page-footer">
+                <a href="{{ url_for('main.index') }}">Back to Home</a>
+            </footer>
+        </section>
+    </main>
+</body>
+</html>
