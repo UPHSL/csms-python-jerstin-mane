@@ -77,6 +77,70 @@ class ServiceRequestRepository:
             status=row["status"],
         )
 
+    def find_all(self, search_term=None, status=None):
+        connection = sqlite3.connect(self.database_path)
+
+        connection.row_factory = sqlite3.Row
+
+        conditions = []
+        parameters = []
+
+        if search_term:
+            pattern = f"%{search_term}%"
+
+            conditions.append(
+                """
+                (
+                    LOWER(service_type) LIKE LOWER(?)
+                    OR LOWER(description) LIKE LOWER(?)
+                )
+                """
+            )
+
+            parameters.extend([pattern, pattern])
+
+        if status:
+            conditions.append("status = ?")
+            parameters.append(status)
+
+        query = """
+            SELECT
+                id,
+                resident_id,
+                service_type,
+                description,
+                date_requested,
+                status
+            FROM service_requests
+        """
+
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+
+        query += """
+            ORDER BY
+                date_requested DESC,
+                id DESC
+        """
+
+        rows = connection.execute(query, parameters).fetchall()
+
+        connection.close()
+
+        from datetime import date
+
+        return [
+            ServiceRequest(
+                id=row["id"],
+                resident_id=row["resident_id"],
+                service_type=row["service_type"],
+                description=row["description"],
+                date_requested=date.fromisoformat(row["date_requested"]),
+                status=row["status"],
+            )
+            for row in rows
+        ]
+
     def update_status(self, service_request_id, status):
         connection = sqlite3.connect(self.database_path)
 
