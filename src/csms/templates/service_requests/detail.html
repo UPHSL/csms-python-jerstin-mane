@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Request Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <main class="page-container">
+        <section class="form-card">
+            <p class="label">Service Request Management</p>
+            <h1>Service Request Details</h1>
+            <p class="message">View the complete information and current status of this request.</p>
+
+            <nav class="module-navigation">
+                <a href="{{ url_for('main.resident_list') }}">Resident Management</a>
+                <a href="{{ url_for('main.service_request_list') }}">Service Requests</a>
+            </nav>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+            <div class="request-details">
+                <div class="detail-item">
+                    <span>Service Request ID</span>
+                    <strong>{{ service_request.id }}</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Resident ID</span>
+                    <strong>{{ service_request.resident_id }}</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Service Type</span>
+                    <strong>{{ service_request.service_type }}</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Date Requested</span>
+                    <strong>{{ service_request.date_requested.strftime("%Y-%m-%d") }}</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Current Status</span>
+                    <strong>
+                        <span class="status-badge status-{{ service_request.status|lower|replace(' ', '-') }}">
+                            {{ service_request.status }}
+                        </span>
+                    </strong>
+                </div>
+
+                <div class="detail-item detail-description">
+                    <span>Description</span>
+                    <p>{{ service_request.description }}</p>
+                </div>
+            </div>
+
+            <section class="workflow-section">
+                <h2>Available Actions</h2>
+
+                <div class="form-actions">
+                    {% if service_request.status == "Pending" %}
+                        <form
+                            method="POST"
+                            action="{{ url_for('main.process_service_request', service_request_id=service_request.id) }}"
+                        >
+                            <button type="submit">Start Processing</button>
+                        </form>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('main.cancel_service_request', service_request_id=service_request.id) }}"
+                            onsubmit="return confirm('Are you sure you want to cancel this request?');"
+                        >
+                            <button class="button-danger" type="submit">
+                                Cancel Request
+                            </button>
+                        </form>
+
+                    {% elif service_request.status == "In Progress" %}
+                        <form
+                            method="POST"
+                            action="{{ url_for('main.complete_service_request', service_request_id=service_request.id) }}"
+                        >
+                            <button type="submit">Complete Request</button>
+                        </form>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('main.cancel_service_request', service_request_id=service_request.id) }}"
+                            onsubmit="return confirm('Are you sure you want to cancel this request?');"
+                        >
+                            <button class="button-danger" type="submit">
+                                Cancel Request
+                            </button>
+                        </form>
+
+                    {% else %}
+                        <p class="terminal-message">
+                            This Service Request is {{ service_request.status }}.
+                            No further workflow actions are available.
+                        </p>
+                    {% endif %}
+                </div>
+            </section>
+
+            <div class="form-actions">
+                <a
+                    class="button button-danger"
+                    href="{{ url_for('main.service_request_list') }}"
+                >
+                    Back to Service Requests
+                </a>
+            </div>
+
+            <footer class="page-footer">
+                <a href="{{ url_for('main.resident_list') }}">View Residents</a>
+            </footer>
+        </section>
+    </main>
+</body>
+</html>
