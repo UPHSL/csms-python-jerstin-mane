@@ -21,6 +21,11 @@
                 </a>
             </header>
 
+            <nav class="module-navigation">
+                <a href="{{ url_for('main.resident_list') }}">Resident Management</a>
+                <a href="{{ url_for('main.service_request_list') }}">Service Requests</a>
+            </nav>
+
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% for category, message in messages %}
                     <div class="alert alert-{{ category }}">

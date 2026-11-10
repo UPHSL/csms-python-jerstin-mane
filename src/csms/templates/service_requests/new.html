@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Service Request</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <main class="page-container">
+        <section class="form-card">
+            <p class="label">Service Request Management</p>
+            <h1>Submit Service Request</h1>
+            <p class="message">Enter the details of the resident's requested service.</p>
+
+            <nav class="module-navigation">
+                <a href="{{ url_for('main.resident_list') }}">Resident Management</a>
+                <a href="{{ url_for('main.service_request_list') }}">Service Requests</a>
+            </nav>
+
+            {% if errors %}
+                <div class="alert alert-error">
+                    <p>Please check the following information:</p>
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('main.new_service_request') }}">
+                <div class="form-group">
+                    <label for="resident_id">Resident ID</label>
+                    <input
+                        type="number"
+                        id="resident_id"
+                        name="resident_id"
+                        value="{{ form_data.get('resident_id', '') }}"
+                        min="1"
+                        placeholder="Enter the Resident ID"
+                        required
+                    >
+                    <small>Enter the ID of an existing Active Resident.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="service_type">Service Type</label>
+                    <input
+                        type="text"
+                        id="service_type"
+                        name="service_type"
+                        value="{{ form_data.get('service_type', '') }}"
+                        placeholder="Example: Health Assistance"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="4"
+                        placeholder="Describe the requested service"
+                        required
+                    >{{ form_data.get('description', '') }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="date_requested">Date Requested</label>
+                    <input
+                        type="date"
+                        id="date_requested"
+                        name="date_requested"
+                        value="{{ form_data.get('date_requested', '') }}"
+                        required
+                    >
+                </div>
+
+                <div class="info-message">
+                    <strong>Initial Status:</strong> Pending
+                    <p>New Service Requests will automatically receive a Pending status after successful submission.</p>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">Submit Service Request</button>
+                    <a
+                        class="button button-danger"
+                        href="{{ url_for('main.service_request_list') }}"
+                    >
+                        Cancel
+                    </a>
+                </div>
+            </form>
+
+            <footer class="page-footer">
+                <a href="{{ url_for('main.resident_list') }}">View Residents</a>
+            </footer>
+        </section>
+    </main>
+</body>
+</html>
