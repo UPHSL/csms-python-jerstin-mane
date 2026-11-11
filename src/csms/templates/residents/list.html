@@ -10,21 +10,28 @@
     <main class="page-container">
         <section class="page-card">
             <header class="page-header">
-                <div>
+                <div class="page-header-content">
                     <p class="label">Community Services Management System</p>
                     <h1>Resident Management</h1>
                     <p class="message">View, search, and manage registered residents.</p>
                 </div>
-
-                <a class="button" href="{{ url_for('main.register_resident') }}">
-                    Register Resident
-                </a>
             </header>
 
-            <nav class="module-navigation">
-                <a href="{{ url_for('main.resident_list') }}">Resident Management</a>
-                <a href="{{ url_for('main.service_request_list') }}">Service Requests</a>
-            </nav>
+            <div class="module-navigation">
+                <!-- LEFT SIDE -->
+                <div class="module-navigation-actions">
+                    <a class="button" href="{{ url_for('main.register_resident') }}">
+                        Register Resident
+                    </a>
+                </div>
+
+                <!-- RIGHT SIDE -->
+                <nav class="module-navigation-links">
+                    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('main.resident_list') }}">Resident Management</a>
+                    <a href="{{ url_for('main.service_request_list') }}">Service Requests</a>
+                </nav>
+            </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% for category, message in messages %}
@@ -36,6 +43,7 @@
 
             <form class="search-form" method="GET" action="{{ url_for('main.resident_list') }}">
                 <label for="search">Search by first name or last name</label>
+
                 <div class="search-controls">
                     <input
                         type="text"
@@ -44,7 +52,9 @@
                         value="{{ search_term }}"
                         placeholder="Enter a resident's name"
                     >
+
                     <button type="submit">Search</button>
+
                     <a class="button button-secondary" href="{{ url_for('main.resident_list') }}">
                         Clear
                     </a>
@@ -70,6 +80,7 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             {% for resident in residents %}
                                 <tr>

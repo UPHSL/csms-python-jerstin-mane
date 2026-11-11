@@ -10,21 +10,28 @@
     <main class="page-container">
         <section class="page-card">
             <header class="page-header">
-                <div>
+                <div class="page-header-content">
                     <p class="label">Community Services Management System</p>
                     <h1>Service Request Management</h1>
                     <p class="message">View, search, filter, and manage service requests.</p>
                 </div>
-
-                <a class="button" href="{{ url_for('main.new_service_request') }}">
-                    Submit Service Request
-                </a>
             </header>
 
-            <nav class="module-navigation">
-                <a href="{{ url_for('main.resident_list') }}">Resident Management</a>
-                <a href="{{ url_for('main.service_request_list') }}">Service Requests</a>
-            </nav>
+            <div class="module-navigation">
+                <!-- LEFT SIDE -->
+                <div class="module-navigation-actions">
+                    <a class="button" href="{{ url_for('main.new_service_request') }}">
+                        Submit Service Request
+                    </a>
+                </div>
+
+                <!-- RIGHT SIDE -->
+                <nav class="module-navigation-links">
+                    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('main.resident_list') }}">Resident Management</a>
+                    <a href="{{ url_for('main.service_request_list') }}">Service Requests</a>
+                </nav>
+            </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% for category, message in messages %}

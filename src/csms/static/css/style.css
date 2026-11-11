@@ -658,12 +658,17 @@ tbody tr:hover {
 
 /* Module Navigation */
 
+
+/* Module Navigation */
+
 .module-navigation {
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
     flex-wrap: wrap;
     gap: 12px;
-    margin: 24px 0;
-    padding-bottom: 18px;
+    margin: 20px 0 24px;
+    padding-bottom: 20px;
     border-bottom: 1px solid var(--border-soft);
 }
 
@@ -908,3 +913,264 @@ tbody tr:hover {
     background: #F05F65 !important;
     color: #FFFFFF !important;
 }
+
+/* =================================
+   T14 CSMS DASHBOARD
+================================= */
+
+.dashboard-section {
+    margin: 30px 0;
+}
+
+.dashboard-section .table-heading {
+    margin-bottom: 18px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.summary-card {
+    padding: 22px;
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    background: #FFFFFF;
+    box-shadow: 0 3px 12px rgb(52 52 79 / 5%);
+}
+
+.summary-label {
+    min-height: 2.7rem;
+    margin: 0 0 12px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+.summary-value {
+    margin: 0;
+    color: var(--text-dark);
+    font-size: 2rem;
+    font-weight: 750;
+}
+
+.summary-note {
+    margin: 8px 0 0;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.resident-grid .summary-card:nth-child(1) {
+    border-top: 4px solid var(--lavender);
+}
+
+.resident-grid .summary-card:nth-child(2) {
+    border-top: 4px solid #9FED72;
+}
+
+.resident-grid .summary-card:nth-child(3) {
+    border-top: 4px solid var(--coral);
+}
+
+.service-request-grid .summary-card:nth-child(1) {
+    border-top: 4px solid var(--lavender);
+}
+
+.service-request-grid .summary-card:nth-child(2) {
+    border-top: 4px solid #9FA0FF;
+}
+
+.service-request-grid .summary-card:nth-child(3) {
+    border-top: 4px solid var(--mint);
+}
+
+.service-request-grid .summary-card:nth-child(4) {
+    border-top: 4px solid #9FED72;
+}
+
+.service-request-grid .summary-card:nth-child(5) {
+    border-top: 4px solid var(--coral);
+}
+
+.service-request-grid .open-summary-card {
+    background: #FFF9F0;
+}
+
+/* Dashboard Mobile Layout */
+
+@media (max-width: 700px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .summary-card {
+        padding: 16px;
+    }
+
+    .summary-value {
+        font-size: 1.7rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =================================
+   T14 PASTEL FILTER DROPDOWN
+================================= */
+
+.search-form select {
+    display: block;
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 42px 12px 14px;
+    border: 1px solid #D9D2C8;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    color: var(--text-dark);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.5;
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    background-image:
+        linear-gradient(45deg, transparent 50%, #6263C7 50%),
+        linear-gradient(135deg, #6263C7 50%, transparent 50%);
+
+    background-position:
+        calc(100% - 18px) 50%,
+        calc(100% - 12px) 50%;
+
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+}
+
+.search-form select:focus {
+    outline: none;
+    border-color: var(--lavender);
+    box-shadow: 0 0 0 3px rgb(159 160 255 / 25%);
+}
+
+.search-form select:hover {
+    border-color: var(--lavender);
+}
+
+.search-form select option {
+    background-color: #FFFFFF;
+    color: #34344F;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+/* Service Request and Resident Navigation Layout */
+
+.module-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+    margin: 20px 0 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.module-navigation-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: auto;
+}
+
+.module-navigation-actions a.button {
+    background-color: #9FA0FF;
+    color: #34344F;
+    border: none;
+    text-decoration: none;
+}
+
+.module-navigation-actions a.button:hover {
+    background-color: #898AE8;
+    color: #FFFFFF;
+}
+
+.module-navigation-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-left: auto;
+}
+
+.module-navigation-links a {
+    display: inline-block;
+    padding: 9px 16px;
+    border-radius: 8px;
+    background-color: #D5E8E6;
+    color: #315B51;
+    font-size: 0.9rem;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.module-navigation-links a:hover {
+    background-color: #BED7D4;
+}
+
+/* Mobile Layout */
+@media (max-width: 700px) {
+    .module-navigation {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .module-navigation-actions,
+    .module-navigation-links {
+        width: 100%;
+    }
+
+    .module-navigation-actions a.button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .module-navigation-links {
+        flex-direction: column;
+        margin-left: 0;
+    }
+
+    .module-navigation-links a {
+        width: 100%;
+        text-align: center;
+    }
+}
+/* Dashboard Navigation - Align Buttons to the Right */
+
+.dashboard-navigation {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+
+.dashboard-navigation .module-navigation-links {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: auto;
+    gap: 12px;
+}
+
+
+

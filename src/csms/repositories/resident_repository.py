@@ -209,4 +209,44 @@ class ResidentRepository:
 
         return self.find_by_id(resident_id)
 
+    def count_all(self) -> int:
+        """Count all persisted residents."""
+        connection = sqlite3.connect(self.database_path)
 
+        row = connection.execute(
+            """
+            SELECT COUNT(*)
+            FROM residents
+            """
+        ).fetchone()
+
+        connection.close()
+
+        return row[0]
+
+    def get_status_counts(self) -> dict[str, int]:
+        """Count persisted residents grouped by status."""
+        connection = sqlite3.connect(self.database_path)
+
+        rows = connection.execute(
+            """
+            SELECT
+                status,
+                COUNT(*)
+            FROM residents
+            GROUP BY status
+            """
+        ).fetchall()
+
+        connection.close()
+
+        counts = {
+            "Active": 0,
+            "Inactive": 0,
+        }
+
+        for status, total in rows:
+            if status in counts:
+                counts[status] = total
+
+        return counts
