@@ -157,3 +157,88 @@ class ServiceRequestRepository:
         connection.close()
 
         return self.find_by_id(service_request_id)
+
+    def count_all(self) -> int:
+        """Count all persisted Service Requests."""
+        connection = sqlite3.connect(self.database_path)
+
+        row = connection.execute(
+            """
+            SELECT COUNT(*)
+            FROM service_requests
+            """
+        ).fetchone()
+
+        connection.close()
+
+        return row[0]
+
+    def get_status_counts(self) -> dict[str, int]:
+        """Count persisted Service Requests grouped by status."""
+        connection = sqlite3.connect(self.database_path)
+
+        rows = connection.execute(
+            """
+            SELECT
+                status,
+                COUNT(*)
+            FROM service_requests
+            GROUP BY status
+            """
+        ).fetchall()
+
+        connection.close()
+
+        counts = {
+            "Pending": 0,
+            "In Progress": 0,
+            "Completed": 0,
+            "Cancelled": 0,
+        }
+
+        for status, total in rows:
+            if status in counts:
+                counts[status] = total
+
+        return counts
+
+    def find_recent(self, limit: int = 5) -> list[ServiceRequest]:
+        """Find the most recent Service Requests."""
+        from datetime import date
+
+        limit = max(0, min(int(limit), 5))
+
+        connection = sqlite3.connect(self.database_path)
+        connection.row_factory = sqlite3.Row
+
+        rows = connection.execute(
+            """
+            SELECT
+                id,
+                resident_id,
+                service_type,
+                description,
+                date_requested,
+                status
+            FROM service_requests
+            ORDER BY
+                date_requested DESC,
+                id DESC
+            LIMIT ?
+            """,
+            (limit,),
+        ).fetchall()
+
+        connection.close()
+
+        return [
+            ServiceRequest(
+                id=row["id"],
+                resident_id=row["resident_id"],
+                service_type=row["service_type"],
+                description=row["description"],
+                date_requested=date.fromisoformat(row["date_requested"]),
+                status=row["status"],
+            )
+            for row in rows
+        ]

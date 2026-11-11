@@ -20,6 +20,7 @@ from csms.repositories.resident_repository import ResidentRepository
 from csms.repositories.service_request_repository import (
     ServiceRequestRepository,
 )
+from csms.services.dashboard_service import DashboardService
 from csms.services.request_service import (
     ALLOWED_STATUSES,
     ServiceRequestQueryService,
@@ -105,6 +106,25 @@ def health():
             "status": "ok",
             "version": current_app.config["APP_VERSION"],
         }
+    )
+
+
+# Dashboard Route
+
+
+@main_blueprint.get("/dashboard")
+def dashboard() -> str:
+    """Display the read-only CSMS operational dashboard."""
+    service = DashboardService(
+        _resident_repository(),
+        _service_request_repository(),
+    )
+
+    summary = service.get_dashboard_summary()
+
+    return render_template(
+        "dashboard.html",
+        **summary,
     )
 
 
