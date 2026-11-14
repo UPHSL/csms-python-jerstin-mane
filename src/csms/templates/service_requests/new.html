@@ -13,11 +13,6 @@
             <h1>Submit Service Request</h1>
             <p class="message">Enter the details of the resident's requested service.</p>
 
-            <nav class="module-navigation">
-                <a href="{{ url_for('main.resident_list') }}">Resident Management</a>
-                <a href="{{ url_for('main.service_request_list') }}">Service Requests</a>
-            </nav>
-
             {% if errors %}
                 <div class="alert alert-error">
                     <p>Please check the following information:</p>
