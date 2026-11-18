@@ -1,4 +1,5 @@
-"""Smoke tests for the Sprint 0 Flask application."""
+
+"""Smoke tests for the CSMS v1.0.0 Flask application."""
 
 from flask.testing import FlaskClient
 
@@ -11,6 +12,7 @@ def test_home_page_is_available(client: FlaskClient) -> None:
     assert b"Community Services Management System" in response.data
     assert b"Sprint 0 - Developer Onboarding" in response.data
     assert b"Python with Flask" in response.data
+    assert b"v1.0.0" in response.data
 
 
 def test_health_endpoint_returns_ok(client: FlaskClient) -> None:
@@ -21,7 +23,7 @@ def test_health_endpoint_returns_ok(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert payload is not None
     assert payload["status"] == "ok"
-    assert payload["version"] == "0.1.0"
+    assert payload["version"] == "1.0.0"
 
 
 def test_unknown_page_returns_not_found(client: FlaskClient) -> None:
